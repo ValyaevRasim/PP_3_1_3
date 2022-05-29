@@ -11,6 +11,9 @@
         <nav class="navbar navbar-dark bg-dark">
             <a class="navbar-brand" href="text">
                 <strong> [[${#httpServletRequest.remoteUser}]]</strong> with roles:
+                <tr th:each="role: ${currentUserRoleList}">
+                    <td th:text="${role.name}" />
+                </tr>
             </a>
             <ul class="navbar-nav float-lg-end">
                 <li class="nav-item">
@@ -77,7 +80,11 @@
                                                 <td th:utext="${msg.getLastname()}">index</td>
                                                 <td th:utext="${msg.getAge()}">index</td>
                                                 <td th:utext="${msg.isEnabled()}">index</td>
-                                                <td th:utext="${msg.getRoles()}">index</td>
+<!--                                                <td th:utext="${msg.getRoles()}">index</td>-->
+<!--                                                    <td th:each="role: ${msg.getRoles()}"> th:utext="${role.name}"</td>-->
+                                                <td>
+                                                    <span th:each="role: ${msg.getRoles()}"><span th:text="${role.name}"/> </span>
+                                                </td>
                                                 <td>
                                                     <form th:action="@{'updateUser/'+${msg.getId()}}">
                                                         <button type="submit" class="btn btn-info">Edit</button>

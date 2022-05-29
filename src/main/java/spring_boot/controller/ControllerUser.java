@@ -32,7 +32,7 @@ public class ControllerUser {
     public String user(Model model, Principal principal) {
         System.out.println("showAllUsers/allUsers");
         List<User> allUsers = new ArrayList<>();
-        User user = userDetailServiceImpl.findByUsername(principal.getName());
+        User user = userDetailServiceImpl.getUserByUsername(principal.getName());
         allUsers.add(user);
         model.addAttribute("userList", allUsers);
         return "user";

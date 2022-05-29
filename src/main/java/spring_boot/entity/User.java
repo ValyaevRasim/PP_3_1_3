@@ -7,6 +7,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -21,15 +22,18 @@ public class User implements UserDetails {
     private Long id;
 
     @NotEmpty
+    @NotBlank
     @Column(name = "username", unique = true, nullable = false)
     private String username;
 
     @NotEmpty
+    @NotBlank
     @Column(nullable = false)
     private String password;
 
     @Transient
     @NotEmpty
+    @NotBlank
     @Column(nullable = false)
     private String passwordConfirm; //подтверждение пароля
 

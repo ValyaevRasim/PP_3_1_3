@@ -1,7 +1,6 @@
 package spring_boot.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +9,9 @@ import spring_boot.entity.User;
 import spring_boot.service.RoleServiceImpl;
 import spring_boot.service.UserDetailServiceImpl;
 
+import java.security.Principal;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/admin")
@@ -27,15 +28,18 @@ public class ControllerAdmin {
 
     // начальная страница
     @RequestMapping("/")
-    public String showAllUsers(Model model) {
+    public String showAllUsers(Model model, Principal principal) {
         System.out.println("showAllUsers/allUsers");
         List<User> allUsers = userDetailServiceImpl.getAllUsers();
+        User user = (User) userDetailServiceImpl.loadUserByUsername(principal.getName());
+        Set<Role> currentUserRoleList = user.getRoles();
+        model.addAttribute("currentUserRoleList", currentUserRoleList);
         model.addAttribute("userList", allUsers);
         return "allUsers";
     }
 
     // добавление нового пользователяю, используем 2 метода
-    @Secured("ROLE_ADMIN")
+//    @Secured("ROLE_ADMIN")
     //в config добавить @EnableGlobalMethodSecurity(securedEnabled = true) //защищаем отдельные методы
     @RequestMapping("/addUser")
     public String addNewUser(Model model) {
@@ -46,7 +50,7 @@ public class ControllerAdmin {
         return "newUser";
     }
 
-    @Secured("ROLE_ADMIN")
+    //    @Secured("ROLE_ADMIN")
     @PostMapping("/saveUser")
     public String createNewUser(@ModelAttribute("user") User user) {
         System.out.println("createNewUser");
@@ -94,9 +98,9 @@ public class ControllerAdmin {
     @PostMapping("/saveRole")
     public String saveRole(@ModelAttribute("role") Role role) {
         System.out.println("createNewRole");
-        role.setName("ROLE_" + role.getName().toUpperCase());
+//        role.setName("ROLE_" + role.getName().toUpperCase());
+        role.setName(role.getName().toUpperCase());
         roleServiceImpl.saveRole(role);
         return "redirect:/admin/";
     }
-
 }
